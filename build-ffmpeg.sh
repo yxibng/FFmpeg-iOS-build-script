@@ -1,29 +1,87 @@
 #!/bin/sh
 
 # directories
-FF_VERSION="4.1"
-#FF_VERSION="snapshot-git"
+FF_VERSION="4.1.4"
 if [[ $FFMPEG_VERSION != "" ]]; then
   FF_VERSION=$FFMPEG_VERSION
 fi
 SOURCE="ffmpeg-$FF_VERSION"
-FAT="FFmpeg-iOS"
+FAT="FFmpeg-iOS$FF_VERSION"
 
-SCRATCH="scratch"
+SCRATCH="scratch$FF_VERSION"
 # must be an absolute path
-THIN=`pwd`/"thin"
+THIN=`pwd`/"thin$FF_VERSION"
 
 # absolute path to x264 library
-#X264=`pwd`/fat-x264
+X264=`pwd`/x264-iOS
 
 #FDK_AAC=`pwd`/../fdk-aac-build-script-for-iOS/fdk-aac-ios
 
+#CONFIGURE_FLAGS="--enable-cross-compile --disable-debug --disable-programs \
+#                 --disable-doc --enable-pic"
 CONFIGURE_FLAGS="--enable-cross-compile --disable-debug --disable-programs \
-                 --disable-doc --enable-pic"
+--disable-doc --enable-pic --enable-avresample --disable-debug \
+--disable-ffprobe \
+--disable-ffplay \
+--disable-symver \
+--disable-muxers \
+--disable-demuxers \
+--disable-parsers \
+--disable-bsfs \
+--disable-protocols \
+--disable-indevs \
+--disable-outdevs \
+--disable-filters \
+--disable-decoders \
+--enable-videotoolbox \
+--enable-encoder=h264_videotoolbox \
+--enable-avresample \
+--enable-swresample \
+--enable-swscale \
+--enable-decoder=h264_videotoolbox \
+--enable-decoder=h264 \
+--enable-decoder=aac \
+--enable-decoder=flv \
+--enable-decoder=rawvideo \
+--enable-decoder=pcm_f32le \
+--enable-decoder=pcm_f32be \
+--enable-decoder=pcm_s16le \
+--enable-decoder=pcm_s16be \
+--enable-decoder=pcm_u16le \
+--enable-decoder=pcm_u16be \
+--enable-muxer=flv \
+--enable-muxer=rawvideo  \
+--enable-muxer=pcm_f32le \
+--enable-muxer=pcm_f32be \
+--enable-muxer=pcm_s16le \
+--enable-muxer=pcm_s16be \
+--enable-muxer=pcm_u16le \
+--enable-muxer=pcm_u16be \
+--enable-demuxer=flv \
+--enable-demuxer=h264 \
+--enable-demuxer=pcm_s16le \
+--enable-encoder=rawvideo \
+--enable-encoder=aac \
+--enable-encoder=flv \
+--enable-encoder=yuv4 \
+--enable-encoder=pcm_f32le \
+--enable-encoder=pcm_f32be \
+--enable-encoder=pcm_s16le \
+--enable-encoder=pcm_s16be \
+--enable-encoder=pcm_u16le \
+--enable-encoder=pcm_u16be \
+--enable-protocol=hls \
+--enable-protocol=http \
+--enable-protocol=https \
+--enable-protocol=rtmp \
+--enable-indev=avfoundation \
+--enable-indev=lavfi \
+--enable-filter=format"
 
 if [ "$X264" ]
 then
-	CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-gpl --enable-libx264"
+    echo "enable x264"
+	CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-gpl --enable-libx264 --enable-encoder=libx264"
 fi
 
 if [ "$FDK_AAC" ]
@@ -34,7 +92,7 @@ fi
 # avresample
 #CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-avresample"
 
-ARCHS="arm64 armv7 x86_64 i386"
+ARCHS="arm64 armv7 x86_64 armv7s"
 
 COMPILE="y"
 LIPO="y"
@@ -143,7 +201,7 @@ then
 		    --prefix="$THIN/$ARCH" \
 		|| exit 1
 
-		make -j3 install $EXPORT || exit 1
+		make -j$(nproc) install $EXPORT || exit 1
 		cd $CWD
 	done
 fi
