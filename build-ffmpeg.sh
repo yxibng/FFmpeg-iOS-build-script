@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # directories
-FF_VERSION="4.1"
+FF_VERSION="4.2.2"
 #FF_VERSION="snapshot-git"
 if [[ $FFMPEG_VERSION != "" ]]; then
   FF_VERSION=$FFMPEG_VERSION
@@ -14,7 +14,7 @@ SCRATCH="scratch"
 THIN=`pwd`/"thin"
 
 # absolute path to x264 library
-#X264=`pwd`/fat-x264
+X264=`pwd`/fat-x264
 
 #FDK_AAC=`pwd`/../fdk-aac-build-script-for-iOS/fdk-aac-ios
 
@@ -23,6 +23,8 @@ CONFIGURE_FLAGS="--enable-cross-compile --disable-debug --disable-programs \
 
 if [ "$X264" ]
 then
+	echo "================"
+	echo $X264
 	CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-gpl --enable-libx264"
 fi
 
@@ -143,7 +145,7 @@ then
 		    --prefix="$THIN/$ARCH" \
 		|| exit 1
 
-		make -j3 install $EXPORT || exit 1
+		make -j`nproc` install $EXPORT || exit 1
 		cd $CWD
 	done
 fi
