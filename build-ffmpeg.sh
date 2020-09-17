@@ -19,7 +19,15 @@ X264=`pwd`/../x264-ios/x264-iOS
 #FDK_AAC=`pwd`/../fdk-aac-build-script-for-iOS/fdk-aac-ios
 
 CONFIGURE_FLAGS="--enable-cross-compile --disable-debug --disable-programs \
-                 --disable-doc --enable-pic --disable-asm"
+				--disable-symver \
+				--disable-htmlpages \
+				--disable-manpages \
+				--disable-podpages \
+				--disable-avdevice \
+				--disable-cuda \
+				--disable-cuvid \
+				--disable-nvenc \
+                --disable-doc --enable-pic --disable-asm --disable-inline-asm"
 
 if [ "$X264" ]
 then
