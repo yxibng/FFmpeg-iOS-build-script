@@ -1,11 +1,13 @@
 #!/bin/sh
 
+SCRIPT_DIR="$(
+    cd "$(dirname "$0")"
+    pwd
+)"
+
+source $SCRIPT_DIR/constants.sh
+
 # directories
-FF_VERSION="4.3"
-#FF_VERSION="snapshot-git"
-if [[ $FFMPEG_VERSION != "" ]]; then
-  FF_VERSION=$FFMPEG_VERSION
-fi
 SOURCE="ffmpeg-$FF_VERSION"
 FAT="FFmpeg-iOS"
 
