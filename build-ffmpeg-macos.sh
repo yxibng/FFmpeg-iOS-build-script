@@ -16,7 +16,9 @@ mkdir $OUTPUT
 X264=`pwd`/../x264-ios/x264-macos
 
 
-CONFIGURE_FLAGS="--disable-debug --disable-programs \
+CONFIGURE_FLAGS="--disable-debug \
+				--enable-static \
+				--disable-programs \
 				--disable-symver \
 				--disable-htmlpages \
 				--disable-manpages \
@@ -25,6 +27,7 @@ CONFIGURE_FLAGS="--disable-debug --disable-programs \
 				--disable-cuda \
 				--disable-cuvid \
 				--disable-nvenc \
+				--disable-lzma \
                 --disable-doc --enable-pic --disable-asm --disable-inline-asm"
 
 if [ "$X264" ]
@@ -35,7 +38,7 @@ then
 fi
 
 
-CFLAGS="-arch x86_64 -fvisibility=hidden -fembed-bitcode"
+CFLAGS="-arch x86_64 -fvisibility=hidden -fembed-bitcode --mmacosx-version-min=10.10"
 
 LDFLAGS=""
 
@@ -45,9 +48,10 @@ then
 	LDFLAGS="$LDFLAGS -L$X264/lib"
 fi
 
+HOST="--host=x86_64-apple-darwin"
 
 cd $SOURCE
-./configure $CONFIGURE_FLAGS  --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS"  --prefix=$OUTPUT
+./configure $CONFIGURE_FLAGS $HOST --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS"  --prefix=$OUTPUT
 
 make -j`nproc`
 
