@@ -4,3 +4,7 @@ fat*
 FFmpeg.framework
 FFmpeg-*
 .DS_Store
+x264-macos/include/x264.h
+x264-macos/include/x264_config.h
+x264-macos/lib/libx264.a
+x264-macos/lib/pkgconfig/x264.pc
