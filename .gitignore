@@ -8,3 +8,6 @@ x264-macos/include/x264.h
 x264-macos/include/x264_config.h
 x264-macos/lib/libx264.a
 x264-macos/lib/pkgconfig/x264.pc
+x264-iOS/include/x264.h
+x264-iOS/include/x264_config.h
+x264-iOS/lib/libx264.a
