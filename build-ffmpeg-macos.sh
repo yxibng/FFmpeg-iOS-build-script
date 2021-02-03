@@ -8,7 +8,7 @@ source $SCRIPT_DIR/constants.sh
 SOURCE="ffmpeg-$FF_VERSION"
 OUTPUT=$SCRIPT_DIR/ffmpeg-macos
 
-mkdir $OUTPUT
+mkdir -p $OUTPUT
 
 
 
@@ -38,7 +38,7 @@ then
 fi
 
 
-CFLAGS="-arch x86_64 -fvisibility=hidden -fembed-bitcode --mmacosx-version-min=10.10"
+CFLAGS="-arch x86_64 -fvisibility=hidden -fembed-bitcode -mmacosx-version-min=10.12"
 
 LDFLAGS=""
 
@@ -48,10 +48,11 @@ then
 	LDFLAGS="$LDFLAGS -L$X264/lib"
 fi
 
-HOST="--host=x86_64-apple-darwin"
+SDKPATH=`xcrun --show-sdk-path`
+SYSROOT="--sysroot=$SDKPATH"
 
 cd $SOURCE
-./configure $CONFIGURE_FLAGS $HOST --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS"  --prefix=$OUTPUT
+./configure $CONFIGURE_FLAGS $SYSROOT --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS"  --prefix=$OUTPUT
 
 make -j`nproc`
 
