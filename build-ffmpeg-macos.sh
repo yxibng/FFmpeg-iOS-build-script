@@ -8,6 +8,12 @@ source $SCRIPT_DIR/constants.sh
 SOURCE="ffmpeg-$FF_VERSION"
 OUTPUT=$SCRIPT_DIR/ffmpeg-macos
 
+#clean last build
+if [ -f $OUTPUT ]; then 
+	rm -rf $OUTPUT
+fi
+
+#make output dir
 mkdir -p $OUTPUT
 
 
@@ -30,10 +36,10 @@ CONFIGURE_FLAGS="--disable-debug \
 				--disable-lzma \
                 --disable-doc --enable-pic --disable-asm --disable-inline-asm"
 
-if [ "$X264" ]
+#test if link to x264
+if [ -f $X264 ]
 then
-	echo "================"
-	echo $X264
+	echo "x264 exist, set link config, path = $X264"
 	CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-gpl --enable-libx264"
 fi
 
@@ -42,7 +48,7 @@ CFLAGS="-arch x86_64 -fvisibility=hidden -fembed-bitcode -mmacosx-version-min=10
 
 LDFLAGS=""
 
-if [ "$X264" ]
+if [ -f $X264 ]
 then
 	CFLAGS="$CFLAGS -I$X264/include"
 	LDFLAGS="$LDFLAGS -L$X264/lib"
